@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>拼音互動板</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      display: flex;
+      height: 100vh;
+    }
+    .left, .right {
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .left {
+      width: 30%;
+      background-color: #f5f5f5;
+      border-right: 2px solid #ccc;
+    }
+    .right {
+      width: 70%;
+      display: flex;
+      flex-direction: column;
+    }
+    .section-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+    .grid {
+      display: grid;
+      gap: 10px;
+    }
+    .grid#shengmu {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .grid#tone {
+      grid-template-columns: repeat(5, 1fr);
+    }
+    .grid#yunmu {
+      grid-template-columns: repeat(6, 1fr);
+    }
+    .button {
+      padding: 16px;
+      border: 2px solid #888;
+      border-radius: 10px;
+      background-color: white;
+      cursor: pointer;
+      font-size: 22px;
+      text-align: center;
+      transition: background-color 0.2s, color 0.2s;
+    }
+    .button.active {
+      background-color: #e74c3c;
+      color: white;
+    }
+    .top, .bottom {
+      padding: 10px;
+    }
+    .top {
+      border-bottom: 2px solid #ccc;
+    }
+    #clear-button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      font-size: 18px;
+      background-color: #555;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #clear-button:hover {
+      background-color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="left">
+    <div class="section-title">聲母 / 声母</div>
+    <div class="grid" id="shengmu">
+      <div class="button">b</div><div class="button">p</div><div class="button">m</div><div class="button">f</div>
+      <div class="button">d</div><div class="button">t</div><div class="button">n</div><div class="button">l</div>
+      <div class="button">g</div><div class="button">k</div><div class="button">h</div><div class="button">j</div>
+      <div class="button">q</div><div class="button">x</div><div class="button">zh</div><div class="button">ch</div>
+      <div class="button">sh</div><div class="button">r</div><div class="button">z</div><div class="button">c</div>
+      <div class="button">s</div><div class="button">y</div><div class="button">w</div>
+    </div>
+    <button id="clear-button">清除選取</button>
+  </div>
+
+  <div class="right">
+    <div class="top">
+      <div class="section-title">声调</div>
+      <div class="grid" id="tone">
+        <div class="button">－</div>
+        <div class="button">∕</div>
+        <div class="button">∨</div>
+        <div class="button">⧵</div>
+        <div class="button">　</div>
+      </div>
+    </div>
+    <div class="bottom">
+      <div class="section-title">韵母</div>
+      <div class="grid" id="yunmu">
+        <div class="button">a</div><div class="button">o</div><div class="button">e</div><div class="button">i</div><div class="button">u</div><div class="button">ü</div>
+        <div class="button">ai</div><div class="button">ei</div><div class="button">ui</div><div class="button">ao</div><div class="button">ou</div><div class="button">iu</div>
+        <div class="button">ie</div><div class="button">üe</div><div class="button">er</div><div class="button">an</div><div class="button">en</div><div class="button">in</div>
+        <div class="button">un</div><div class="button">ün</div><div class="button">ang</div><div class="button">eng</div><div class="button">ing</div><div class="button">ong</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function bindSectionAudio(sectionId, prefix) {
+      const buttons = document.querySelectorAll(`#${sectionId} .button`);
+      buttons.forEach((btn, index) => {
+        const fileNumber = String(index + 1).padStart(2, '0'); // 01, 02...
+        const audioFile = `audio/${prefix}_${fileNumber}.mp3`;
+
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('active');
+          const audio = new Audio(audioFile);
+          audio.play().catch(e => {
+            console.warn(`找不到音檔：${audioFile}`);
+          });
+        });
+      });
+    }
+
+    bindSectionAudio('shengmu', 'sec1');
+    bindSectionAudio('tone', 'sec2');
+    bindSectionAudio('yunmu', 'sec3');
+
+    document.getElementById('clear-button').addEventListener('click', () => {
+      document.querySelectorAll('.button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+    });
+  </script>
+</body>
+</html>
