@@ -75,6 +75,11 @@
     #clear-button:hover {
       background-color: #333;
     }
+    #toggle-audio-label {
+      display: block;
+      margin-top: 20px;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
@@ -88,6 +93,13 @@
       <div class="button">sh</div><div class="button">r</div><div class="button">z</div><div class="button">c</div>
       <div class="button">s</div><div class="button">y</div><div class="button">w</div>
     </div>
+
+    <!-- ✅ 聲音開關 -->
+    <label id="toggle-audio-label">
+      <input type="checkbox" id="toggle-audio" />
+      啟用聲音
+    </label>
+
     <button id="clear-button">清除選取</button>
   </div>
 
@@ -122,10 +134,13 @@
 
         btn.addEventListener('click', () => {
           btn.classList.toggle('active');
-          const audio = new Audio(audioFile);
-          audio.play().catch(e => {
-            console.warn(`找不到音檔：${audioFile}`);
-          });
+          const shouldPlay = document.getElementById('toggle-audio').checked;
+          if (shouldPlay) {
+            const audio = new Audio(audioFile);
+            audio.play().catch(e => {
+              console.warn(`找不到音檔：${audioFile}`);
+            });
+          }
         });
       });
     }
